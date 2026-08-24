@@ -1,6 +1,6 @@
 export function renderLabCard(lab, completed = false) {
     return `
-        <article class="lab-card">
+        <article class="lab-card reveal-on-scroll">
             <div class="lab-card-top">
                 <div class="lab-icon">${lab.icon || "⌘"}</div>
                 ${

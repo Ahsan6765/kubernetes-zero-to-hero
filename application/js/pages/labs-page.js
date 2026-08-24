@@ -81,7 +81,56 @@ function openLabRunner(lab) {
         if (body) {
             body.outerHTML = html;
         } else {
-            openModal(html);
+            // Show a lightweight skeleton first to simulate loading
+            const skeleton = `
+                <div class="lab-runner">
+                    <div class="muted-kicker">LAB ${stepIndex + 1} / ${lab.steps.length}</div>
+                    <div class="skeleton" style="height:22px; width:50%; margin:12px 0; border-radius:6px"></div>
+                    <div class="skeleton" style="height:18px; width:70%; margin:6px 0; border-radius:6px"></div>
+                    <div class="lab-terminal skeleton" style="height:180px; margin-top:12px; border-radius:8px"></div>
+                    <div style="height:12px"></div>
+                    <div class="topic-actions">
+                        <div class="skeleton" style="height:36px; width:120px; border-radius:8px"></div>
+                    </div>
+                </div>
+            `;
+
+            openModal(skeleton);
+
+            // Replace skeleton with real content after a short delay
+            setTimeout(() => {
+                const modalNow = document.getElementById('global-modal');
+                const bodyNow = modalNow?.querySelector('.lab-runner');
+                if (bodyNow) {
+                    bodyNow.outerHTML = html;
+                    // rebind events for buttons
+                    document.getElementById("lab-close")?.addEventListener("click", closeModal);
+                    document.getElementById("lab-run")?.addEventListener("click", () => {
+                        if (!revealed) {
+                            revealed = true;
+                            render();
+                            return;
+                        }
+
+                        if (!last) {
+                            stepIndex += 1;
+                            revealed = false;
+                            render();
+                            return;
+                        }
+
+                        markLabComplete(lab.id);
+                        closeModal();
+
+                        const container = document.getElementById("main-content");
+
+                        if (container) {
+                            container.innerHTML = renderLabsPage();
+                            bindLabsPageEvents();
+                        }
+                    });
+                }
+            }, 260);
         }
 
         document.getElementById("lab-close")?.addEventListener("click", closeModal);

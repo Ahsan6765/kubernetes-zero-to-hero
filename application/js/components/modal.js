@@ -1,4 +1,5 @@
 let escapeHandler = null;
+let trapHandler = null;
 
 export function openModal(content) {
     closeModal();
@@ -34,6 +35,32 @@ export function openModal(content) {
     };
 
     document.addEventListener("keydown", escapeHandler);
+
+    // Simple focus trap: keep focus cycling inside the modal
+    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusables = Array.from(modal.querySelectorAll(focusableSelector));
+    const firstFocusable = focusables[0];
+    const lastFocusable = focusables[focusables.length - 1];
+    if (firstFocusable) firstFocusable.focus();
+
+    trapHandler = (e) => {
+        if (e.key === "Tab") {
+            if (focusables.length === 0) {
+                e.preventDefault();
+                return;
+            }
+
+            if (e.shiftKey && document.activeElement === firstFocusable) {
+                e.preventDefault();
+                lastFocusable.focus();
+            } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+                e.preventDefault();
+                firstFocusable.focus();
+            }
+        }
+    };
+
+    document.addEventListener("keydown", trapHandler);
 
     return modal;
 }

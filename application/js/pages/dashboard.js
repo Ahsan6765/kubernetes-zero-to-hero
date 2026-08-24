@@ -14,7 +14,7 @@ import {
 import { getCompletedLabCount } from "../features/labs-tracker.js";
 import { navigate } from "../features/navigation.js";
 import { renderProgressBar } from "../components/progress.js";
-import { escapeHtml } from "../utils/helpers.js";
+import { escapeHtml, animateProgressBars, initRevealOnScroll } from "../utils/helpers.js";
 
 export function renderDashboard() {
     const progress = calculateOverallProgress(roadmap);
@@ -102,7 +102,7 @@ export function renderDashboard() {
 
 function statCard(label, value) {
     return `
-        <div class="stat-card card">
+        <div class="stat-card card reveal-on-scroll">
             <div class="stat-label">${label}</div>
             <div class="stat-value">${value}</div>
         </div>
@@ -132,4 +132,10 @@ export function bindDashboardEvents() {
     document
         .getElementById("start-next-topic")
         ?.addEventListener("click", openNext);
+
+    // animate progress bars after render
+    animateProgressBars(document.getElementById('main-content'));
+
+    // initialize reveal-on-scroll for subtle card reveals
+    initRevealOnScroll(document.getElementById('main-content'));
 }
