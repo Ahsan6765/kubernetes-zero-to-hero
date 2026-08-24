@@ -1,0 +1,120 @@
+.roadmap-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.milestone {
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.milestone-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 22px;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.milestone-header:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.milestone-number {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: var(--accent-soft);
+    color: var(--accent-light);
+
+    font-weight: 800;
+}
+
+.milestone-info {
+    flex: 1;
+}
+
+.milestone-title {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.milestone-description {
+    margin-top: 3px;
+
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.milestone-progress {
+    width: 130px;
+}
+
+.milestone-body {
+    padding: 0 22px 22px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+.milestone-topic {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.milestone-topic:hover {
+    border-color: rgba(108, 99, 255, 0.4);
+}
+
+.topic-status {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--border-strong);
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+.topic-status.complete {
+    background: var(--success-soft);
+    border-color: var(--success);
+    color: var(--success);
+}

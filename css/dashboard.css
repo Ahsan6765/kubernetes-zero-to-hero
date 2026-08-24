@@ -1,0 +1,123 @@
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(12, 1fr);
+
+    gap: 20px;
+}
+
+.dashboard-hero {
+    grid-column: span 8;
+
+    padding: 30px;
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(56, 189, 248, 0.12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(108, 99, 255, 0.12),
+            transparent 35%
+        );
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.dashboard-hero h1 {
+    max-width: 700px;
+
+    font-size: 34px;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+}
+
+.dashboard-hero p {
+    max-width: 650px;
+
+    margin-top: 12px;
+
+    color: var(--text-secondary);
+}
+
+.dashboard-progress-card {
+    grid-column: span 4;
+
+    padding: 24px;
+}
+
+.stat-grid {
+    grid-column: span 12;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+}
+
+.stat-card {
+    padding: 20px;
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.stat-value {
+    margin-top: 5px;
+
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.continue-card {
+    grid-column: span 7;
+    padding: 24px;
+}
+
+.activity-card {
+    grid-column: span 5;
+    padding: 24px;
+}
+
+.section-title {
+    margin-bottom: 16px;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.activity-item:last-child {
+    border-bottom: 0;
+}
+
+.activity-dot {
+    width: 8px;
+    height: 8px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--success);
+}

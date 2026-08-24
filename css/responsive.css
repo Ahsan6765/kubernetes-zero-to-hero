@@ -1,0 +1,85 @@
+@media (max-width: 1100px) {
+    .dashboard-progress-card {
+        grid-column: span 12;
+    }
+
+    /* Hide the fixed sidebar on smaller screens instead of forcing --sidebar-width to 0.
+       Setting the CSS variable to 0 can collapse layout unexpectedly. */
+    .sidebar {
+        display: none;
+    }
+
+    .continue-card {
+        grid-column: span 12;
+    }
+
+    .activity-card {
+        grid-column: span 12;
+    }
+
+    .labs-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 850px) {
+
+    /* Hide the fixed sidebar on smaller screens instead of forcing --sidebar-width to 0.
+       Setting the CSS variable to 0 can collapse layout unexpectedly. */
+    .sidebar {
+        display: none;
+    }
+
+    .app-main {
+        margin-left: 0;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .topic-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .topic-sidebar {
+        position: static;
+    }
+
+    .stat-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .milestone-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 27px;
+    }
+
+    .stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .labs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topic-hero h1 {
+        font-size: 26px;
+    }
+
+    .topic-actions {
+        flex-direction: column;
+    }
+}

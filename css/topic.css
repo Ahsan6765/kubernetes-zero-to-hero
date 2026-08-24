@@ -1,0 +1,125 @@
+.topic-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        280px;
+
+    gap: 24px;
+}
+
+.topic-main {
+    min-width: 0;
+}
+
+.topic-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + 8px);
+
+    align-self: start;
+}
+
+.topic-hero {
+    padding: 28px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(108, 99, 255, 0.12),
+            transparent 30%
+        );
+}
+
+.topic-hero h1 {
+    margin-top: 12px;
+
+    font-size: 32px;
+    letter-spacing: -0.035em;
+}
+
+.topic-hero p {
+    margin-top: 10px;
+
+    color: var(--text-secondary);
+}
+
+.topic-section {
+    margin-top: 20px;
+
+    padding: 25px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    background: rgba(255, 255, 255, 0.018);
+}
+
+.topic-section h2 {
+    margin-bottom: 12px;
+
+    font-size: 20px;
+}
+
+.topic-section p {
+    color: var(--text-secondary);
+}
+
+.topic-section ul {
+    margin-top: 12px;
+    padding-left: 20px;
+
+    list-style: disc;
+
+    color: var(--text-secondary);
+}
+
+.topic-section li {
+    margin-bottom: 7px;
+}
+
+.code-block {
+    margin-top: 16px;
+
+    padding: 18px;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    background: #06080d;
+
+    color: #c9d4e5;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.topic-actions {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.prerequisite-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.prerequisite-item {
+    padding: 10px 12px;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--bg-tertiary);
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
