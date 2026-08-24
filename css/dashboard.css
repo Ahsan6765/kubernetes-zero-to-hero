@@ -33,6 +33,7 @@
 
 .dashboard-hero h1 {
     max-width: 700px;
+    margin-top: 12px;
 
     font-size: 34px;
     line-height: 1.15;

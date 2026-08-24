@@ -1,42 +1,60 @@
 @media (max-width: 1100px) {
-    .dashboard-progress-card {
-        grid-column: span 12;
+    .menu-toggle {
+        display: inline-flex;
     }
 
-    /* Hide the fixed sidebar on smaller screens instead of forcing --sidebar-width to 0.
-       Setting the CSS variable to 0 can collapse layout unexpectedly. */
     .sidebar {
+        transform: translateX(-100%);
+        transition: transform 200ms ease;
+        box-shadow: none;
+    }
+
+    body.sidebar-open .sidebar {
+        transform: translateX(0);
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .sidebar-overlay {
         display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 55;
     }
 
-    .continue-card {
-        grid-column: span 12;
+    body.sidebar-open .sidebar-overlay {
+        display: block;
     }
 
-    .activity-card {
+    .app-main,
+    .app-header {
+        margin-left: 0;
+        left: 0;
+    }
+
+    .dashboard-progress-card,
+    .continue-card,
+    .activity-card,
+    .dashboard-hero {
         grid-column: span 12;
     }
 
     .labs-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .search-trigger {
+        min-width: 0;
     }
 }
 
 @media (max-width: 850px) {
-
-    /* Hide the fixed sidebar on smaller screens instead of forcing --sidebar-width to 0.
-       Setting the CSS variable to 0 can collapse layout unexpectedly. */
-    .sidebar {
-        display: none;
-    }
-
-    .app-main {
-        margin-left: 0;
-    }
-
     .main-content {
         padding: 20px;
+    }
+
+    .app-header {
+        padding: 0 16px;
     }
 
     .topic-layout {
@@ -48,23 +66,43 @@
     }
 
     .stat-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .milestone-body {
         grid-template-columns: 1fr;
     }
+
+    .milestone-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .search-trigger-label,
+    .search-trigger kbd {
+        display: none;
+    }
+
+    .search-trigger {
+        width: 36px;
+        min-width: 36px;
+        height: 36px;
+        padding: 0;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 600px) {
-
     .main-content {
         padding: 15px;
     }
 
     .dashboard-hero h1 {
-        font-size: 27px;
+        font-size: 26px;
+    }
+
+    .page-title {
+        font-size: 22px;
     }
 
     .stat-grid {
@@ -76,10 +114,23 @@
     }
 
     .topic-hero h1 {
-        font-size: 26px;
+        font-size: 24px;
     }
 
-    .topic-actions {
+    .topic-actions,
+    .hero-actions,
+    .topic-pager {
         flex-direction: column;
+    }
+
+    .topic-actions .btn,
+    .hero-actions .btn,
+    .topic-pager .btn {
+        width: 100%;
+    }
+
+    .progress-hero-row {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

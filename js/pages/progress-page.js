@@ -1,122 +1,88 @@
-import { roadmap } from "../data/roadmap.js";
-
+import { roadmap, getAllTopics, getTopicTitle } from "../data/catalog.js";
+import { labs } from "../data/labs.js";
 import {
     calculateOverallProgress,
-    getCompletedTopicCount
+    getCompletedTopicCount,
+    getTopicStatus
 } from "../features/progress-tracker.js";
-
-import {
-    renderProgressBar
-} from "../components/progress.js";
+import { getCompletedLabCount } from "../features/labs-tracker.js";
+import { getAllBookmarks } from "../features/bookmarks.js";
+import { renderProgressBar } from "../components/progress.js";
+import { navigate } from "../features/navigation.js";
+import { escapeHtml } from "../utils/helpers.js";
 
 export function renderProgressPage() {
-
-    const progress =
-        calculateOverallProgress(
-            roadmap
-        );
-
-    const completed =
-        getCompletedTopicCount(
-            roadmap
-        );
-
-    const total =
-        roadmap.reduce(
-            (sum, milestone) =>
-                sum + milestone.topics.length,
-            0
-        );
+    const progress = calculateOverallProgress(roadmap);
+    const completed = getCompletedTopicCount(roadmap);
+    const total = getAllTopics().length;
+    const bookmarks = getAllBookmarks();
+    const labsDone = getCompletedLabCount(labs);
 
     return `
         <div class="page-header">
-
-            <div class="page-title">
-                My Progress
-            </div>
-
-            <div class="page-subtitle">
-                Track your journey toward
-                Kubernetes mastery.
-            </div>
-
+            <div class="page-title">My Progress</div>
+            <div class="page-subtitle">Track your journey toward Kubernetes mastery.</div>
         </div>
 
-        <div class="card" style="padding:28px;">
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:end;
-                margin-bottom:14px;
-            ">
-
+        <div class="card progress-hero-card">
+            <div class="progress-hero-row">
                 <div>
-                    <div style="
-                        color:var(--text-muted);
-                        font-size:12px;
-                    ">
-                        OVERALL COMPLETION
-                    </div>
-
-                    <div style="
-                        margin-top:4px;
-                        font-size:36px;
-                        font-weight:800;
-                    ">
-                        ${progress}%
-                    </div>
+                    <div class="muted-kicker">OVERALL COMPLETION</div>
+                    <div class="progress-percent">${progress}%</div>
                 </div>
-
-                <div style="
-                    color:var(--text-secondary);
-                    font-size:13px;
-                ">
-                    ${completed} / ${total} topics
-                </div>
-
+                <div class="muted-meta">${completed} / ${total} topics · ${labsDone} labs</div>
             </div>
-
             ${renderProgressBar(progress)}
-
         </div>
 
-        <div style="
-            margin-top:20px;
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-            gap:16px;
-        ">
+        <div class="progress-grid">
+            ${roadmap
+                .map((milestone) => {
+                    const done = milestone.topics.filter(
+                        (topic) => getTopicStatus(topic.id) === "completed"
+                    ).length;
+                    const pct = Math.round((done / milestone.topics.length) * 100);
 
-            ${roadmap.map(
-                milestone => `
-                    <div
-                        class="card"
-                        style="padding:20px;"
-                    >
-
-                        <div style="
-                            font-weight:700;
-                        ">
-                            ${milestone.number}.
-                            ${milestone.title}
+                    return `
+                        <div class="card milestone-progress-card">
+                            <div class="milestone-progress-head">
+                                <div>
+                                    <div class="card-title-sm">
+                                        ${milestone.number}. ${escapeHtml(milestone.title)}
+                                    </div>
+                                    <div class="muted-meta">${done} / ${milestone.topics.length} topics</div>
+                                </div>
+                                <strong>${pct}%</strong>
+                            </div>
+                            ${renderProgressBar(pct)}
                         </div>
-
-                        <div style="
-                            margin-top:7px;
-                            color:var(--text-secondary);
-                            font-size:12px;
-                        ">
-                            ${milestone.topics.length}
-                            topics
-                        </div>
-
-                    </div>
-                `
-            ).join("")}
-
+                    `;
+                })
+                .join("")}
         </div>
+
+        <section class="bookmarks-section">
+            <h2 class="section-title">Bookmarks</h2>
+            ${
+                bookmarks.length
+                    ? `<div class="bookmark-list">
+                        ${bookmarks
+                            .map((id) => {
+                                const title = getTopicTitle(id);
+                                return `<button class="bookmark-chip" type="button" data-bookmark-id="${id}">${escapeHtml(title)}</button>`;
+                            })
+                            .join("")}
+                       </div>`
+                    : `<p class="muted-meta">Bookmark topics from a lesson page to see them here.</p>`
+            }
+        </section>
     `;
 }
 
-export function bindProgressPageEvents() {}
+export function bindProgressPageEvents() {
+    document.querySelectorAll("[data-bookmark-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+            navigate("topic", { topicId: button.dataset.bookmarkId });
+        });
+    });
+}

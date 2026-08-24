@@ -109,6 +109,11 @@ pre {
     padding-top: var(--header-height);
 }
 
+body.modal-open,
+body.sidebar-open {
+    overflow: hidden;
+}
+
 .main-content {
     padding: 32px;
     max-width: 1600px;
@@ -192,6 +197,7 @@ pre {
     justify-content: space-between;
     gap: 18px;
     z-index: 60;
+    overflow-y: auto;
 }
 
 .sidebar-brand {
@@ -288,6 +294,21 @@ pre {
     border-radius: 8px;
     background: var(--bg-elevated);
     color: var(--text-secondary);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.icon-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.sidebar-overlay {
+    display: none;
 }
 
 

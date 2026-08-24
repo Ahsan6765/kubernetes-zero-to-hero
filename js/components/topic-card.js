@@ -8,16 +8,16 @@ import {
 
 export function renderTopicCard(topic) {
 
-    const status =
-        getTopicStatus(topic.id);
-
-    const completed =
-        status === "completed";
+    const status = getTopicStatus(topic.id);
+    const completed = status === "completed";
+    const inProgress = status === "in-progress";
 
     return `
         <article
             class="topic-card"
             data-topic-id="${topic.id}"
+            tabindex="0"
+            role="link"
         >
 
             <div style="
@@ -51,13 +51,17 @@ export function renderTopicCard(topic) {
                 color:${
                     completed
                         ? "var(--success)"
-                        : "var(--text-muted)"
+                        : inProgress
+                            ? "var(--info)"
+                            : "var(--text-muted)"
                 };
                 font-size:12px;
             ">
                 ${completed
                     ? "✓ Completed"
-                    : "○ Not started"
+                    : inProgress
+                        ? "● In progress"
+                        : "○ Not started"
                 }
             </div>
 
@@ -71,20 +75,20 @@ export function bindTopicCardEvents() {
         .querySelectorAll("[data-topic-id]")
         .forEach(card => {
 
-            card.addEventListener(
-                "click",
-                () => {
+            const open = () => {
+                navigate("topic", {
+                    topicId: card.dataset.topicId
+                });
+            };
 
-                    navigate(
-                        "topic",
-                        {
-                            topicId:
-                                card.dataset.topicId
-                        }
-                    );
+            card.addEventListener("click", open);
 
+            card.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    open();
                 }
-            );
+            });
 
         });
 }

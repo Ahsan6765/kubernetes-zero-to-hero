@@ -18,11 +18,19 @@
     align-items: center;
     gap: 16px;
 
+    width: 100%;
     padding: 22px;
 
     cursor: pointer;
+    text-align: left;
+    background: transparent;
+    color: inherit;
 
     transition: var(--transition);
+}
+
+.milestone.collapsed .milestone-body {
+    display: none;
 }
 
 .milestone-header:hover {
