@@ -1,8 +1,10 @@
 let escapeHandler = null;
 let trapHandler = null;
+let lastFocusedElement = null;
 
 export function openModal(content) {
     closeModal();
+    lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
     const modal = document.createElement("div");
     modal.id = "global-modal";
@@ -44,19 +46,21 @@ export function openModal(content) {
     if (firstFocusable) firstFocusable.focus();
 
     trapHandler = (e) => {
-        if (e.key === "Tab") {
-            if (focusables.length === 0) {
-                e.preventDefault();
-                return;
-            }
+        if (e.key !== "Tab") {
+            return;
+        }
 
-            if (e.shiftKey && document.activeElement === firstFocusable) {
-                e.preventDefault();
-                lastFocusable.focus();
-            } else if (!e.shiftKey && document.activeElement === lastFocusable) {
-                e.preventDefault();
-                firstFocusable.focus();
-            }
+        if (focusables.length === 0) {
+            e.preventDefault();
+            return;
+        }
+
+        if (e.shiftKey && document.activeElement === firstFocusable) {
+            e.preventDefault();
+            lastFocusable.focus();
+        } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+            e.preventDefault();
+            firstFocusable.focus();
         }
     };
 
@@ -73,4 +77,15 @@ export function closeModal() {
         document.removeEventListener("keydown", escapeHandler);
         escapeHandler = null;
     }
+
+    if (trapHandler) {
+        document.removeEventListener("keydown", trapHandler);
+        trapHandler = null;
+    }
+
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+        lastFocusedElement.focus();
+    }
+
+    lastFocusedElement = null;
 }

@@ -61,6 +61,11 @@ function renderPage(route) {
 
     updateHeader(route, topicTitle);
 
+    if (route.name === "topic" && !route.params?.topicId) {
+        navigate("dashboard");
+        return;
+    }
+
     switch (route.name) {
         case "dashboard":
             container.innerHTML = renderDashboard();
@@ -72,10 +77,18 @@ function renderPage(route) {
             bindRoadmapPageEvents();
             break;
 
-        case "topic":
+        case "topic": {
+            const topicExists = !!findTopic(route.params?.topicId)?.topic;
+
+            if (!topicExists) {
+                navigate("dashboard");
+                return;
+            }
+
             container.innerHTML = renderTopicPage(route.params?.topicId);
             bindTopicPageEvents(route.params?.topicId);
             break;
+        }
 
         case "labs":
             container.innerHTML = renderLabsPage();
