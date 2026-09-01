@@ -209,6 +209,203 @@
     white-space: nowrap;
 }
 
+.simulation-panel,
+.builder-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.simulation-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.simulation-header h2,
+.builder-panel h2 {
+    font-size: 28px;
+    letter-spacing: -0.03em;
+}
+
+.sim-layout,
+.builder-layout {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 18px;
+}
+
+.sim-palette,
+.builder-palette {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.02);
+}
+
+.sim-token,
+.builder-component {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    text-align: left;
+    transition: var(--transition);
+}
+
+.sim-token:hover,
+.builder-component:hover {
+    border-color: rgba(108, 99, 255, 0.45);
+    transform: translateY(-1px);
+}
+
+.sim-board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    min-height: 220px;
+}
+
+.sim-node,
+.builder-node {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 120px;
+}
+
+.node-header {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.node-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: flex-start;
+    color: var(--text-primary);
+}
+
+.node-idle {
+    border-color: var(--border);
+}
+
+.node-ok {
+    border-color: rgba(49, 196, 141, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(49, 196, 141, 0.2);
+}
+
+.node-failed {
+    border-color: rgba(239, 102, 117, 0.6);
+    box-shadow: inset 0 0 0 1px rgba(239, 102, 117, 0.2);
+}
+
+.node-hover {
+    border-color: rgba(56, 189, 248, 0.55);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.18);
+}
+
+.resource-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(108,99,255,0.12);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.resource-chip-failed {
+    background: rgba(239, 102, 117, 0.16);
+    color: #ffd4d8;
+}
+
+.resource-chip-warning {
+    background: rgba(245,185,66,0.18);
+    color: #fce2aa;
+}
+
+.sim-status-panel {
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.02);
+}
+
+.sim-status {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.sim-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.builder-canvas {
+    min-height: 220px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 12px;
+    align-content: start;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.02);
+}
+
+.builder-empty {
+    grid-column: 1 / -1;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-md);
+}
+
+.builder-node {
+    align-items: center;
+    justify-content: center;
+    min-height: 90px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.resource-deployment {
+    background: rgba(108, 99, 255, 0.12);
+}
+
+.resource-service {
+    background: rgba(49, 196, 141, 0.12);
+}
+
+.resource-ingress {
+    background: rgba(56, 189, 248, 0.12);
+}
+
+.resource-configmap,
+.resource-secret {
+    background: rgba(245, 185, 66, 0.12);
+}
+
 .badge-beginner {
     background: var(--success-soft);
     color: var(--success);

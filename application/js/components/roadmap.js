@@ -12,7 +12,7 @@ export function renderRoadmap(roadmap) {
                     ).length;
 
                     return `
-                        <section class="milestone" data-milestone="${milestone.id}">
+                        <section class="milestone reveal-on-scroll" data-milestone="${milestone.id}">
                             <button class="milestone-header" type="button" data-toggle-milestone>
                                 <div class="milestone-number">${milestone.number}</div>
                                 <div class="milestone-info">

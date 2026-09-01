@@ -7,32 +7,49 @@ function buildKey(key) {
 }
 
 export function setStorage(key, value) {
-    localStorage.setItem(
-        buildKey(key),
-        JSON.stringify(value)
-    );
+    try {
+        localStorage.setItem(
+            buildKey(key),
+            JSON.stringify(value)
+        );
+    } catch (error) {
+        console.warn("Storage write failed:", error);
+    }
 }
 
 export function getStorage(key, fallback = null) {
-    const value = localStorage.getItem(buildKey(key));
-
-    if (value === null) {
-        return fallback;
-    }
-
     try {
-        return JSON.parse(value);
-    } catch {
+        const value = localStorage.getItem(buildKey(key));
+
+        if (value === null) {
+            return fallback;
+        }
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return fallback;
+        }
+    } catch (error) {
+        console.warn("Storage read failed:", error);
         return fallback;
     }
 }
 
 export function removeStorage(key) {
-    localStorage.removeItem(buildKey(key));
+    try {
+        localStorage.removeItem(buildKey(key));
+    } catch (error) {
+        console.warn("Storage remove failed:", error);
+    }
 }
 
 export function clearAppStorage() {
-    Object.keys(localStorage)
-        .filter(key => key.startsWith(`${prefix}:`))
-        .forEach(key => localStorage.removeItem(key));
+    try {
+        Object.keys(localStorage)
+            .filter(key => key.startsWith(`${prefix}:`))
+            .forEach(key => localStorage.removeItem(key));
+    } catch (error) {
+        console.warn("Storage clear failed:", error);
+    }
 }

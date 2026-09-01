@@ -10,7 +10,7 @@
 
     <meta
         name="description"
-        content="Kubernetes Zero to Hero - Interactive Kubernetes learning platform"
+        content="Kubernetes Zero to Hero - Interactive Kubernetes learning platform for you"
     >
 
     <title>Kubernetes Zero → Hero</title>
@@ -24,15 +24,25 @@
     >
 
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
-    <link rel="stylesheet" href="./css/roadmap.css">
-    <link rel="stylesheet" href="./css/topic.css">
-    <link rel="stylesheet" href="./css/labs.css">
-    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="preload" href="./css/components.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="./css/dashboard.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="./css/roadmap.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="./css/topic.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="./css/labs.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="./css/responsive.css" as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="./css/components.css">
+        <link rel="stylesheet" href="./css/dashboard.css">
+        <link rel="stylesheet" href="./css/roadmap.css">
+        <link rel="stylesheet" href="./css/topic.css">
+        <link rel="stylesheet" href="./css/labs.css">
+        <link rel="stylesheet" href="./css/responsive.css">
+    </noscript>
 </head>
 
 <body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <div id="app">
 

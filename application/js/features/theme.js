@@ -6,11 +6,17 @@ import {
 const STORAGE_KEY = "theme";
 
 export function initializeTheme() {
-    const theme =
-        getStorage(STORAGE_KEY, "dark");
+    // Respect stored preference; otherwise fall back to system preference
+    const stored = getStorage(STORAGE_KEY, null);
 
-    document.documentElement.dataset.theme =
-        theme;
+    let theme = stored;
+
+    if (!theme) {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
+    }
+
+    document.documentElement.dataset.theme = theme;
 }
 
 export function toggleTheme() {

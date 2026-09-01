@@ -15,7 +15,8 @@ export function renderProgressBar(
         <div class="progress">
             <div
                 class="progress-bar"
-                style="width: ${percentage}%"
+                data-percentage="${percentage}"
+                style="width: 0"
             ></div>
         </div>
     `;

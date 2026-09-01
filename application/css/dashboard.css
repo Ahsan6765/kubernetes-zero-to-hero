@@ -81,6 +81,102 @@
     font-weight: 800;
 }
 
+.interactive-learning {
+    grid-column: span 12;
+    padding: 24px;
+}
+
+.interactive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.interactive-card {
+    width: 100%;
+    padding: 22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    text-align: left;
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.interactive-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(108, 99, 255, 0.45);
+    box-shadow: 0 20px 40px rgba(108, 99, 255, 0.12);
+}
+
+.interactive-card-primary {
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.15), rgba(56, 189, 248, 0.12));
+}
+
+.interactive-card h3 {
+    margin-top: 8px;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+}
+
+.interactive-card p {
+    margin-top: 8px;
+    color: var(--text-secondary);
+}
+
+.story-card {
+    grid-column: span 12;
+    padding: 24px;
+}
+
+.story-track {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.story-step {
+    position: relative;
+    padding: 18px 14px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 220ms ease, border-color 220ms ease;
+}
+
+.story-step span {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.story-step strong {
+    font-size: 14px;
+}
+
+.story-step.active {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(108,99,255,0.08));
+    transform: translateY(-1px);
+}
+
+.story-step::after {
+    content: "";
+    position: absolute;
+    inset: auto 14px -10px 14px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--info));
+    opacity: 0;
+    border-radius: 999px;
+}
+
+.story-step.active::after {
+    opacity: 1;
+}
+
 .continue-card {
     grid-column: span 7;
     padding: 24px;

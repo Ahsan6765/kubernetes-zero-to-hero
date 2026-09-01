@@ -19,6 +19,7 @@ import {
     updateHeader
 } from "./components/header.js";
 
+import { initRevealOnScroll } from "./utils/helpers.js";
 import { renderDashboard, bindDashboardEvents } from "./pages/dashboard.js";
 import { renderRoadmapPage, bindRoadmapPageEvents } from "./pages/roadmap-page.js";
 import { renderTopicPage, bindTopicPageEvents } from "./pages/topic-page.js";
@@ -61,6 +62,11 @@ function renderPage(route) {
 
     updateHeader(route, topicTitle);
 
+    if (route.name === "topic" && !route.params?.topicId) {
+        navigate("dashboard");
+        return;
+    }
+
     switch (route.name) {
         case "dashboard":
             container.innerHTML = renderDashboard();
@@ -72,10 +78,18 @@ function renderPage(route) {
             bindRoadmapPageEvents();
             break;
 
-        case "topic":
+        case "topic": {
+            const topicExists = !!findTopic(route.params?.topicId)?.topic;
+
+            if (!topicExists) {
+                navigate("dashboard");
+                return;
+            }
+
             container.innerHTML = renderTopicPage(route.params?.topicId);
             bindTopicPageEvents(route.params?.topicId);
             break;
+        }
 
         case "labs":
             container.innerHTML = renderLabsPage();
@@ -97,6 +111,7 @@ function renderPage(route) {
             bindDashboardEvents();
     }
 
+    initRevealOnScroll(document.getElementById("main-content"));
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 

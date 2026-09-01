@@ -15,14 +15,15 @@ const PAGE_TITLES = {
 };
 
 export function navigate(name, params = {}) {
-    currentRoute = { name, params };
+    const safeName = PAGE_TITLES[name] ? name : "dashboard";
+    currentRoute = { name: safeName, params };
 
     const query = new URLSearchParams(params).toString();
 
     window.history.pushState(
         {},
         "",
-        `#${name}${query ? `?${query}` : ""}`
+        `#${safeName}${query ? `?${query}` : ""}`
     );
 
     listeners.forEach((listener) => listener(currentRoute));
@@ -52,9 +53,10 @@ export function parseLocation() {
     }
 
     const [name, query = ""] = hash.split("?");
+    const normalizedName = PAGE_TITLES[name] ? name : "dashboard";
 
     return {
-        name: name || "dashboard",
+        name: normalizedName,
         params: Object.fromEntries(new URLSearchParams(query))
     };
 }

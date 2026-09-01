@@ -38,6 +38,41 @@ function openLabRunner(lab) {
     let stepIndex = 0;
     let revealed = false;
 
+    const rerenderPage = () => {
+        const container = document.getElementById("main-content");
+
+        if (container) {
+            container.innerHTML = renderLabsPage();
+            bindLabsPageEvents();
+        }
+    };
+
+    const bindLabActions = (modalElement, currentStepIndex, currentRevealed, lastStep) => {
+        const closeButton = modalElement?.querySelector("#lab-close");
+        const runButton = modalElement?.querySelector("#lab-run");
+
+        closeButton?.addEventListener("click", closeModal);
+
+        runButton?.addEventListener("click", () => {
+            if (!currentRevealed) {
+                revealed = true;
+                render();
+                return;
+            }
+
+            if (!lastStep) {
+                stepIndex = currentStepIndex + 1;
+                revealed = false;
+                render();
+                return;
+            }
+
+            markLabComplete(lab.id);
+            closeModal();
+            rerenderPage();
+        });
+    };
+
     const render = () => {
         const step = lab.steps[stepIndex];
         const last = stepIndex === lab.steps.length - 1;
@@ -80,36 +115,34 @@ function openLabRunner(lab) {
 
         if (body) {
             body.outerHTML = html;
-        } else {
-            openModal(html);
+            bindLabActions(document.getElementById("global-modal"), stepIndex, revealed, last);
+            return;
         }
 
-        document.getElementById("lab-close")?.addEventListener("click", closeModal);
+        const skeleton = `
+            <div class="lab-runner">
+                <div class="muted-kicker">LAB ${stepIndex + 1} / ${lab.steps.length}</div>
+                <div class="skeleton" style="height:22px; width:50%; margin:12px 0; border-radius:6px"></div>
+                <div class="skeleton" style="height:18px; width:70%; margin:6px 0; border-radius:6px"></div>
+                <div class="lab-terminal skeleton" style="height:180px; margin-top:12px; border-radius:8px"></div>
+                <div style="height:12px"></div>
+                <div class="topic-actions">
+                    <div class="skeleton" style="height:36px; width:120px; border-radius:8px"></div>
+                </div>
+            </div>
+        `;
 
-        document.getElementById("lab-run")?.addEventListener("click", () => {
-            if (!revealed) {
-                revealed = true;
-                render();
-                return;
+        openModal(skeleton);
+
+        setTimeout(() => {
+            const modalNow = document.getElementById("global-modal");
+            const bodyNow = modalNow?.querySelector(".lab-runner");
+
+            if (bodyNow) {
+                bodyNow.outerHTML = html;
+                bindLabActions(modalNow, stepIndex, revealed, last);
             }
-
-            if (!last) {
-                stepIndex += 1;
-                revealed = false;
-                render();
-                return;
-            }
-
-            markLabComplete(lab.id);
-            closeModal();
-
-            const container = document.getElementById("main-content");
-
-            if (container) {
-                container.innerHTML = renderLabsPage();
-                bindLabsPageEvents();
-            }
-        });
+        }, 260);
     };
 
     render();
