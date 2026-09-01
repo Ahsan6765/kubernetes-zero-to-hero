@@ -19,6 +19,7 @@ import {
     updateHeader
 } from "./components/header.js";
 
+import { initRevealOnScroll } from "./utils/helpers.js";
 import { renderDashboard, bindDashboardEvents } from "./pages/dashboard.js";
 import { renderRoadmapPage, bindRoadmapPageEvents } from "./pages/roadmap-page.js";
 import { renderTopicPage, bindTopicPageEvents } from "./pages/topic-page.js";
@@ -110,6 +111,7 @@ function renderPage(route) {
             bindDashboardEvents();
     }
 
+    initRevealOnScroll(document.getElementById("main-content"));
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 

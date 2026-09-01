@@ -40,9 +40,10 @@ export function animateProgressBars(root = document) {
 }
 
 export function initRevealOnScroll(root = document) {
+    const revealables = Array.from(root.querySelectorAll('.reveal-on-scroll'));
+
     if (!('IntersectionObserver' in window)) {
-        // fallback: reveal all
-        root.querySelectorAll('.reveal-on-scroll').forEach((el) => el.classList.add('revealed'));
+        revealables.forEach((el) => el.classList.add('revealed'));
         return;
     }
 
@@ -55,5 +56,14 @@ export function initRevealOnScroll(root = document) {
         });
     }, { threshold: 0.12 });
 
-    root.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+    revealables.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight + 120 && rect.bottom > -80) {
+            el.classList.add('revealed');
+            return;
+        }
+
+        observer.observe(el);
+    });
 }
