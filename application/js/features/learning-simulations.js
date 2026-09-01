@@ -60,6 +60,7 @@ export function openClusterSimulation() {
                 <div class="sim-actions">
                     <button class="btn btn-primary" id="run-scheduler" type="button">Run scheduling</button>
                     <button class="btn btn-secondary" id="trigger-failure" type="button">Inject failure</button>
+                    <button class="btn btn-secondary" id="reset-simulation" type="button">Reset board</button>
                 </div>
             </div>
         </div>
@@ -106,6 +107,10 @@ export function openClusterSimulation() {
     modal.querySelectorAll(".sim-token").forEach((token) => {
         token.addEventListener("dragstart", (event) => {
             event.dataTransfer?.setData("text/plain", token.dataset.resource || "Pod");
+        });
+
+        token.addEventListener("dragend", () => {
+            Object.values(nodeMap).forEach((node) => node?.classList.remove("node-hover"));
         });
     });
 
@@ -171,6 +176,17 @@ export function openClusterSimulation() {
 
         markClusterNode(nodeMap[targetNode], targetNode === "node-a" ? "Node A" : "Node B", `<span class="resource-chip resource-chip-failed">${failedResource}</span> <span class="resource-chip resource-chip-warning">Failed</span>`, "failed");
         updateStatus(`Failure detected on ${targetNode === "node-a" ? "Node A" : "Node B"}. Kubernetes reschedules the workload to keep the service available.`);
+    });
+
+    modal.querySelector("#reset-simulation")?.addEventListener("click", () => {
+        clusterState = {
+            "node-a": [],
+            "node-b": [],
+            ingress: []
+        };
+
+        syncNodes();
+        updateStatus("Cluster reset. Drop new workloads onto the nodes to explore scheduling and networking again.");
     });
 
     syncNodes();
