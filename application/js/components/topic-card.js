@@ -4,7 +4,7 @@ import {
 
 import {
     navigate
-} from "../features/navigation.js";
+} from "../features/navigation.js?v=20260922-3";
 
 export function renderTopicCard(topic) {
 

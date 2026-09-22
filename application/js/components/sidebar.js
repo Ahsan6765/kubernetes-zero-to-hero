@@ -1,7 +1,7 @@
 import {
     getCurrentRoute,
     navigate
-} from "../features/navigation.js";
+} from "../features/navigation.js?v=20260922-3";
 
 export function renderSidebar() {
     const current = getCurrentRoute().name;
@@ -10,25 +10,42 @@ export function renderSidebar() {
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand">
                 <div class="brand-mark">K8</div>
-                <div>
-                    <div class="brand-title">K8s Zero → Hero</div>
-                    <div class="brand-subtitle">Learning OS</div>
+                <div class="brand-copy">
+                    <div class="brand-title">Kubernetes</div>
+                    <div class="brand-subtitle">Zero → Hero</div>
                 </div>
             </div>
 
-            <nav class="sidebar-nav" aria-label="Primary">
-                <div class="nav-section-label">LEARNING</div>
-                ${navItem("dashboard", "⌂", "Dashboard", current)}
-                ${navItem("roadmap", "◎", "Roadmap", current)}
-                ${navItem("labs", "⌘", "Labs", current)}
-                ${navItem("interview", "◈", "Interview", current)}
+            <div class="sidebar-groups">
+                <nav class="sidebar-nav" aria-label="Primary learning navigation">
+                    <div class="nav-section-label">Learn</div>
+                    <div class="nav-group">
+                        ${navItem("dashboard", "⌂", "Dashboard", current)}
+                        ${navItem("roadmap", "◎", "Roadmap", current)}
+                        ${navItem("labs", "⌘", "Labs", current)}
+                        ${navItem("interview", "◈", "Interview", current)}
+                    </div>
+                </nav>
 
-                <div class="nav-section-label">TRACKING</div>
-                ${navItem("progress", "◉", "My Progress", current)}
-            </nav>
+                <nav class="sidebar-nav" aria-label="Progress tracking navigation">
+                    <div class="nav-section-label">Track</div>
+                    <div class="nav-group">
+                        ${navItem("progress", "◉", "My Progress", current)}
+                    </div>
+                </nav>
+            </div>
+
+            <div class="sidebar-summary">
+                <div class="summary-label">Focus</div>
+                <div class="summary-value">Cluster Basics</div>
+                <div class="summary-progress">
+                    <span></span>
+                </div>
+            </div>
 
             <div class="sidebar-footer">
-                <div class="sidebar-version">v0.1.0</div>
+                <span class="sidebar-version">v0.2.0</span>
+                <span class="sidebar-status">Live practice</span>
             </div>
         </aside>
 

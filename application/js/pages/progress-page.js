@@ -8,7 +8,7 @@ import {
 import { getCompletedLabCount } from "../features/labs-tracker.js";
 import { getAllBookmarks } from "../features/bookmarks.js";
 import { renderProgressBar } from "../components/progress.js";
-import { navigate } from "../features/navigation.js";
+import { navigate } from "../features/navigation.js?v=20260922-3";
 import { escapeHtml } from "../utils/helpers.js";
 
 export function renderProgressPage() {

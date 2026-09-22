@@ -16,15 +16,15 @@ const PAGE_TITLES = {
 
 export function navigate(name, params = {}) {
     const safeName = PAGE_TITLES[name] ? name : "dashboard";
-    currentRoute = { name: safeName, params };
-
+    const nextRoute = { name: safeName, params };
     const query = new URLSearchParams(params).toString();
+    const targetHash = `#${safeName}${query ? `?${query}` : ""}`;
 
-    window.history.pushState(
-        {},
-        "",
-        `#${safeName}${query ? `?${query}` : ""}`
-    );
+    currentRoute = nextRoute;
+
+    if (window.location.hash !== targetHash) {
+        window.history.pushState({}, "", targetHash);
+    }
 
     listeners.forEach((listener) => listener(currentRoute));
 }
@@ -43,7 +43,7 @@ export function onRouteChange(listener) {
 }
 
 export function parseLocation() {
-    const hash = window.location.hash.replace("#", "");
+    const hash = window.location.hash.slice(1);
 
     if (!hash) {
         return {
@@ -80,11 +80,11 @@ function emitRoute() {
 }
 
 export function initializeNavigation() {
-    currentRoute = parseLocation();
-
     if (!window.location.hash) {
         window.history.replaceState({}, "", "#dashboard");
     }
+
+    currentRoute = parseLocation();
 
     window.addEventListener("popstate", emitRoute);
     window.addEventListener("hashchange", emitRoute);
