@@ -55,6 +55,11 @@
 
     .app-header {
         padding: 0 16px;
+        height: 64px;
+    }
+
+    .page-title {
+        font-size: 24px;
     }
 
     .topic-layout {
@@ -90,11 +95,31 @@
         padding: 0;
         justify-content: center;
     }
+
+    .interactive-grid,
+    .story-track,
+    .sim-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .section-head-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sim-layout,
+    .builder-layout {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 600px) {
     .main-content {
         padding: 15px;
+    }
+
+    .dashboard-hero {
+        padding: 22px 18px;
     }
 
     .dashboard-hero h1 {
@@ -132,5 +157,13 @@
     .progress-hero-row {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .breadcrumb {
+        max-width: 140px;
+    }
+
+    .modal-card {
+        padding: 18px;
     }
 }

@@ -23,6 +23,18 @@ export function openClusterSimulation() {
                 <span class="badge badge-beginner">Live</span>
             </div>
 
+            <div class="sim-meta-row">
+                <span class="chip chip-active">Scheduler</span>
+                <span class="chip">Networking</span>
+                <span class="chip">Resilience</span>
+            </div>
+
+            <div class="sim-steps" aria-label="Simulation stages">
+                <div class="sim-step is-active" data-stage="0"><span>1</span>Place workload</div>
+                <div class="sim-step" data-stage="1"><span>2</span>Run scheduling</div>
+                <div class="sim-step" data-stage="2"><span>3</span>Expose traffic</div>
+            </div>
+
             <div class="sim-layout">
                 <div class="sim-palette">
                     <div class="muted-kicker">DRAG RESOURCES</div>
@@ -60,12 +72,14 @@ export function openClusterSimulation() {
                 <div class="sim-actions">
                     <button class="btn btn-primary" id="run-scheduler" type="button">Run scheduling</button>
                     <button class="btn btn-secondary" id="trigger-failure" type="button">Inject failure</button>
+                    <button class="btn btn-secondary" id="reset-simulation" type="button">Reset board</button>
                 </div>
             </div>
         </div>
     `);
 
     const statusEl = modal.querySelector("#sim-status");
+    const simSteps = [...modal.querySelectorAll(".sim-step")];
     const nodeMap = {
         "node-a": modal.querySelector('[data-node="node-a"]'),
         "node-b": modal.querySelector('[data-node="node-b"]'),
@@ -82,6 +96,30 @@ export function openClusterSimulation() {
         if (statusEl) {
             statusEl.textContent = message;
         }
+    };
+
+    const getResourceSummary = () => {
+        const podWorkloads = Object.values(clusterState).flat().filter((item) => ["Pod", "Deployment"].includes(item)).length;
+        const serviceCount = Object.values(clusterState).flat().filter((item) => item === "Service").length;
+        const ingressCount = clusterState.ingress.length;
+        const nodeCount = Object.values(clusterState).filter((items) => items.length).length;
+
+        return {
+            podWorkloads,
+            serviceCount,
+            ingressCount,
+            nodeCount,
+            hasWorkload: podWorkloads > 0,
+            hasService: serviceCount > 0,
+            hasIngress: ingressCount > 0,
+            isReady: podWorkloads > 0 && serviceCount > 0 && ingressCount > 0
+        };
+    };
+
+    const updateSimulationStage = (index) => {
+        simSteps.forEach((step, stepIndex) => {
+            step.classList.toggle("is-active", stepIndex === index);
+        });
     };
 
     const syncNodes = () => {
@@ -106,6 +144,10 @@ export function openClusterSimulation() {
     modal.querySelectorAll(".sim-token").forEach((token) => {
         token.addEventListener("dragstart", (event) => {
             event.dataTransfer?.setData("text/plain", token.dataset.resource || "Pod");
+        });
+
+        token.addEventListener("dragend", () => {
+            Object.values(nodeMap).forEach((node) => node?.classList.remove("node-hover"));
         });
     });
 
@@ -132,9 +174,11 @@ export function openClusterSimulation() {
             if (key === "ingress") {
                 clusterState.ingress = [item];
                 updateStatus(`${item} is now exposed through the ingress and ready for external traffic.`);
+                updateSimulationStage(2);
             } else {
                 clusterState[key] = [...new Set([...clusterState[key], item])];
                 updateStatus(`${item} scheduled on ${key === "node-a" ? "Node A" : "Node B"}. The scheduler keeps the workload near the service path.`);
+                updateSimulationStage(1);
             }
 
             syncNodes();
@@ -146,18 +190,28 @@ export function openClusterSimulation() {
 
         if (!hasWorkload) {
             updateStatus("No workload is placed yet. Drag a Pod or Deployment onto a node first.");
+            updateSimulationStage(0);
             return;
         }
 
+        const summary = getResourceSummary();
         const nodeLabel = clusterState["node-a"].length ? "Node A" : "Node B";
         const workload = clusterState["node-a"].length ? clusterState["node-a"][0] : clusterState["node-b"][0];
-        const ingressReady = clusterState.ingress.length > 0;
 
-        if (ingressReady) {
-            updateStatus(`${workload} is running on ${nodeLabel}. The Service is routing traffic to the pod through Ingress.`);
-        } else {
-            updateStatus(`${workload} is running on ${nodeLabel}. The pod is healthy, but no Service or Ingress is exposing it yet.`);
+        if (summary.isReady) {
+            updateStatus(`${workload} is running on ${nodeLabel}. The Service and Ingress are healthy and traffic is exposed correctly.`);
+            updateSimulationStage(2);
+            return;
         }
+
+        if (summary.hasWorkload && summary.hasService) {
+            updateStatus(`${workload} is scheduled and the Service is active, but the workload still needs an Ingress path for external access.`);
+            updateSimulationStage(1);
+            return;
+        }
+
+        updateStatus(`${workload} is scheduled on ${nodeLabel}, but Kubernetes still needs a Service and external path to fully expose the app.`);
+        updateSimulationStage(1);
     });
 
     modal.querySelector("#trigger-failure")?.addEventListener("click", () => {
@@ -169,10 +223,47 @@ export function openClusterSimulation() {
             return;
         }
 
-        markClusterNode(nodeMap[targetNode], targetNode === "node-a" ? "Node A" : "Node B", `<span class="resource-chip resource-chip-failed">${failedResource}</span> <span class="resource-chip resource-chip-warning">Failed</span>`, "failed");
-        updateStatus(`Failure detected on ${targetNode === "node-a" ? "Node A" : "Node B"}. Kubernetes reschedules the workload to keep the service available.`);
+        const fallbackNode = targetNode === "node-a" ? "node-b" : "node-a";
+        const fallbackResource = clusterState[fallbackNode][0] || "Pod";
+
+        clusterState[targetNode] = [];
+        if (!clusterState[fallbackNode].length) {
+            clusterState[fallbackNode] = [failedResource];
+        }
+
+        markClusterNode(
+            nodeMap[targetNode],
+            targetNode === "node-a" ? "Node A" : "Node B",
+            `<span class="resource-chip resource-chip-failed">${failedResource}</span> <span class="resource-chip resource-chip-warning">Failed</span>`,
+            "failed"
+        );
+
+        if (nodeMap[fallbackNode]) {
+            markClusterNode(
+                nodeMap[fallbackNode],
+                fallbackNode === "node-a" ? "Node A" : "Node B",
+                `<span class="resource-chip">${fallbackResource}</span> <span class="resource-chip resource-chip-warning">Failover</span>`,
+                "ok"
+            );
+        }
+
+        updateStatus(`Failure detected on ${targetNode === "node-a" ? "Node A" : "Node B"}. Kubernetes relocates the workload to ${fallbackNode === "node-a" ? "Node A" : "Node B"} to preserve availability.`);
+        updateSimulationStage(2);
     });
 
+    modal.querySelector("#reset-simulation")?.addEventListener("click", () => {
+        clusterState = {
+            "node-a": [],
+            "node-b": [],
+            ingress: []
+        };
+
+        syncNodes();
+        updateSimulationStage(0);
+        updateStatus("Cluster reset. Drop new workloads onto the nodes to explore scheduling and networking again.");
+    });
+
+    updateSimulationStage(0);
     syncNodes();
 }
 
@@ -185,6 +276,12 @@ export function openArchitectureBuilder() {
                     <h2>Architecture Builder</h2>
                 </div>
                 <button class="btn btn-secondary" id="builder-reset" type="button">Reset</button>
+            </div>
+
+            <div class="sim-meta-row">
+                <span class="chip chip-active">Blueprint</span>
+                <span class="chip">Ingress</span>
+                <span class="chip">Config</span>
             </div>
 
             <div class="builder-layout">
@@ -237,16 +334,25 @@ export function openArchitectureBuilder() {
         node.textContent = resource;
         canvas.appendChild(node);
 
-        const count = canvas.querySelectorAll(".builder-node").length;
+        const resources = Array.from(canvas.querySelectorAll(".builder-node")).map((item) => item.textContent.trim());
+        const hasDeployment = resources.includes("Deployment");
+        const hasService = resources.includes("Service");
+        const hasIngress = resources.includes("Ingress");
+        const hasConfig = resources.includes("ConfigMap");
+        const hasSecret = resources.includes("Secret");
 
-        if (resource === "Deployment") {
+        if (hasDeployment && hasService && hasIngress) {
+            updateStatus("Architecture is healthy. The deployment is exposed through the Service and Ingress path.");
+        } else if (resource === "Deployment") {
             updateStatus("Deployment is in place. Add a Service so traffic can reach the pods.");
         } else if (resource === "Service") {
             updateStatus("Service is routing traffic between the Deployment and users.");
         } else if (resource === "Ingress") {
             updateStatus("Ingress is exposing the Service to the outside world.");
-        } else if (count >= 3) {
-            updateStatus("Architecture is forming correctly. Add ConfigMaps and Secrets to manage configuration and sensitive values.");
+        } else if (hasConfig && hasSecret) {
+            updateStatus("Configuration and secrets are layered in correctly for production-ready separation of concerns.");
+        } else {
+            updateStatus("Architecture is forming correctly. Add the missing layer to complete the deployment path.");
         }
     };
 

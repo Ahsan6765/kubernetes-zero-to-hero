@@ -12,7 +12,7 @@ import {
 } from "../features/progress-tracker.js";
 
 import { getCompletedLabCount } from "../features/labs-tracker.js";
-import { navigate } from "../features/navigation.js";
+import { navigate } from "../features/navigation.js?v=20260922-3";
 import { renderProgressBar } from "../components/progress.js";
 import { escapeHtml, animateProgressBars, initRevealOnScroll } from "../utils/helpers.js";
 import { openClusterSimulation, openArchitectureBuilder } from "../features/learning-simulations.js";
@@ -70,17 +70,31 @@ export function renderDashboard() {
             </section>
 
             <section class="interactive-learning card">
-                <div class="section-title">Interactive learning studio</div>
+                <div class="section-head-row">
+                    <div>
+                        <div class="muted-kicker">INTERACTIVE LEARNING STUDIO</div>
+                        <div class="section-title">Practice Kubernetes in motion</div>
+                    </div>
+                    <span class="chip chip-active">2 live simulations</span>
+                </div>
                 <div class="interactive-grid">
                     <button class="interactive-card interactive-card-primary" id="open-cluster-sim" type="button">
-                        <div class="muted-kicker">SIMULATION</div>
+                        <div class="card-badges">
+                            <span class="muted-kicker">SIMULATION</span>
+                            <span class="mini-pill">Scheduler</span>
+                        </div>
                         <h3>Cluster simulation</h3>
-                        <p>Place Pods, Services, and Nodes to watch scheduling and networking behavior.</p>
+                        <p>Place workloads on nodes and observe how the scheduler, services, and ingress react in real time.</p>
+                        <div class="card-footer-note">Best for: Pods, Services, traffic flow</div>
                     </button>
                     <button class="interactive-card" id="open-architecture-builder" type="button">
-                        <div class="muted-kicker">VISUAL DESIGN</div>
+                        <div class="card-badges">
+                            <span class="muted-kicker">VISUAL DESIGN</span>
+                            <span class="mini-pill">Blueprint</span>
+                        </div>
                         <h3>Architecture builder</h3>
-                        <p>Sketch Deployments, Services, Ingress, ConfigMaps, and Secrets in a cluster.</p>
+                        <p>Sketch Deployments, Services, Ingress, ConfigMaps, and Secrets to understand the cluster blueprint.</p>
+                        <div class="card-footer-note">Best for: design patterns and architecture thinking</div>
                     </button>
                 </div>
             </section>

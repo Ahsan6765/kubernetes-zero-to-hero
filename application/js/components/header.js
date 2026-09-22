@@ -1,4 +1,4 @@
-import { getPageTitle } from "../features/navigation.js";
+import { getPageTitle } from "../features/navigation.js?v=20260922-3";
 import { toggleTheme } from "../features/theme.js";
 import { openSearch } from "../features/search.js";
 import { setSidebarOpen } from "./sidebar.js";

@@ -15,7 +15,7 @@ import {
     toggleBookmark
 } from "../features/bookmarks.js";
 
-import { navigate } from "../features/navigation.js";
+import { navigate } from "../features/navigation.js?v=20260922-3";
 import { escapeHtml } from "../utils/helpers.js";
 
 export function renderTopicPage(topicId) {

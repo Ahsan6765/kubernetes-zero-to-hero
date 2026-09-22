@@ -1,8 +1,9 @@
 import {
     initializeNavigation,
     onRouteChange,
-    getCurrentRoute
-} from "./features/navigation.js";
+    getCurrentRoute,
+    navigate
+} from "./features/navigation.js?v=20260922-3";
 
 import { initializeTheme } from "./features/theme.js";
 
@@ -11,22 +12,22 @@ import {
     bindSidebarEvents,
     updateSidebarActive,
     closeSidebar
-} from "./components/sidebar.js";
+} from "./components/sidebar.js?v=20260922-3";
 
 import {
     renderHeader,
     bindHeaderEvents,
     updateHeader
-} from "./components/header.js";
+} from "./components/header.js?v=20260922-3";
 
-import { initRevealOnScroll } from "./utils/helpers.js";
-import { renderDashboard, bindDashboardEvents } from "./pages/dashboard.js";
-import { renderRoadmapPage, bindRoadmapPageEvents } from "./pages/roadmap-page.js";
-import { renderTopicPage, bindTopicPageEvents } from "./pages/topic-page.js";
-import { renderLabsPage, bindLabsPageEvents } from "./pages/labs-page.js";
-import { renderInterviewPage, bindInterviewPageEvents } from "./pages/interview-page.js";
-import { renderProgressPage, bindProgressPageEvents } from "./pages/progress-page.js";
-import { findTopic } from "./data/catalog.js";
+import { initRevealOnScroll } from "./utils/helpers.js?v=20260922-3";
+import { renderDashboard, bindDashboardEvents } from "./pages/dashboard.js?v=20260922-3";
+import { renderRoadmapPage, bindRoadmapPageEvents } from "./pages/roadmap-page.js?v=20260922-3";
+import { renderTopicPage, bindTopicPageEvents } from "./pages/topic-page.js?v=20260922-3";
+import { renderLabsPage, bindLabsPageEvents } from "./pages/labs-page.js?v=20260922-3";
+import { renderInterviewPage, bindInterviewPageEvents } from "./pages/interview-page.js?v=20260922-3";
+import { renderProgressPage, bindProgressPageEvents } from "./pages/progress-page.js?v=20260922-3";
+import { findTopic } from "./data/catalog.js?v=20260922-3";
 
 const app = document.getElementById("app");
 
