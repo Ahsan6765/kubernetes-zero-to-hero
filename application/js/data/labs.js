@@ -1,4 +1,4 @@
-export const labs = [
+const legacyLabs = [
     {
         id: "first-pod",
         icon: "☸",
@@ -105,3 +105,5 @@ export const labs = [
         ]
     }
 ];
+
+export { labs } from "./labs-expanded.js";
