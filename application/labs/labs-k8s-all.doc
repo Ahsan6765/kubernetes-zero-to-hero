@@ -1,0 +1,368 @@
+Sure. Below are all **15 labs** in exactly the format you requested: **Title → Description → Objectives**.
+
+ # Lab 01 — Deploy and Inspect a Kubernetes Pod
+
+ ### Description
+
+ In this lab, you will learn the fundamentals of Kubernetes Pods by deploying a standalone NGINX Pod. You will explore how Kubernetes creates and manages containers, inspect the Pod's runtime information, view logs, execute commands inside the container, and understand the basic Pod lifecycle.
+
+ ### Objectives
+
+ - Understand the purpose and role of a Kubernetes Pod.
+- Create a Pod using `kubectl`.
+- Specify a container image and container port.
+- Check Pod status and runtime information.
+- Identify the Pod IP address and node.
+- Inspect Pod details and Kubernetes events.
+- View container logs.
+- Execute commands inside a running container.
+- Delete and verify removal of a Pod.
+
+---
+
+ # Lab 02 — Create a Kubernetes Pod Using a YAML Manifest
+
+ ### Description
+
+ In this lab, you will create a Kubernetes Pod using a declarative YAML manifest. You will learn the basic structure of Kubernetes resource definitions and understand how `apiVersion`, `kind`, `metadata`, and `spec` are used to describe the desired state of a resource.
+
+ You will also practice using Kubernetes documentation from the command line to discover resource fields instead of relying entirely on memorized YAML.
+
+ ### Objectives
+
+ - Understand the structure of a Kubernetes YAML manifest.
+- Identify the purpose of `apiVersion`, `kind`, `metadata`, and `spec`.
+- Define containers within a Pod specification.
+- Configure a container image and port.
+- Validate and apply a YAML manifest.
+- Inspect a resource using YAML output.
+- Use `kubectl explain` to discover Kubernetes fields.
+- Identify common YAML and Pod specification errors.
+- Delete resources using a manifest.
+
+---
+
+ # Lab 03 — Deploy, Scale, Upgrade, and Roll Back an Application
+
+ ### Description
+
+ In this lab, you will work with Kubernetes Deployments to manage a replicated application. You will create an application with multiple replicas, scale it to accommodate increased demand, perform a rolling image update, monitor the rollout, and perform a rollback when required.
+
+ This lab introduces the relationship between Deployments, ReplicaSets, and Pods and provides practical experience with application lifecycle management.
+
+ ### Objectives
+
+ - Understand the purpose of a Kubernetes Deployment.
+- Create a Deployment with multiple replicas.
+- Understand the relationship between Deployment, ReplicaSet, and Pod.
+- Scale an application horizontally.
+- Perform a rolling update.
+- Monitor Deployment rollout status.
+- Inspect Deployment revision history.
+- Roll back an application to a previous revision.
+- Verify the application state after a rollback.
+
+---
+
+ # Lab 04 — Expose an Application Using a Kubernetes Service
+
+ ### Description
+
+ In this lab, you will expose an application running on Kubernetes Pods through a ClusterIP Service. You will learn why Pod IP addresses should not normally be used as permanent application endpoints and how Services provide stable networking and load distribution.
+
+ You will also investigate how Services use selectors and endpoints to route traffic to the correct Pods.
+
+ ### Objectives
+
+ - Understand the purpose of Kubernetes Services.
+- Create a ClusterIP Service.
+- Configure Service and target ports.
+- Understand Service selectors.
+- Identify a Service's ClusterIP.
+- Inspect Service endpoints.
+- Test application connectivity through a Service.
+- Understand how Services provide stable access to dynamic Pods.
+- Troubleshoot a Service with missing endpoints.
+
+---
+
+ # Lab 05 — Manage Applications Using Labels and Selectors
+
+ ### Description
+
+ In this lab, you will use Kubernetes labels and selectors to organize and identify application workloads. You will create multiple workloads with different labels and use selectors to retrieve specific resources and control which Pods receive Service traffic.
+
+ This lab demonstrates one of the most important concepts used throughout Kubernetes: resource selection through labels.
+
+ ### Objectives
+
+ - Understand the purpose of Kubernetes labels.
+- Apply labels to Pods and other resources.
+- View labels attached to Kubernetes resources.
+- Filter resources using label selectors.
+- Add and remove labels.
+- Understand how Services use selectors.
+- Ensure a Service selects only the intended Pods.
+- Troubleshoot selector and label mismatches.
+
+---
+
+ # Lab 06 — Configure Applications Using ConfigMaps
+
+ ### Description
+
+ In this lab, you will learn how to separate application configuration from container images by using Kubernetes ConfigMaps. You will create configuration data and make it available to an application through environment variables.
+
+ The lab demonstrates how Kubernetes can provide environment-specific configuration without requiring changes to the application container image.
+
+ ### Objectives
+
+ - Understand the purpose of ConfigMaps.
+- Create a ConfigMap.
+- Store key-value configuration data.
+- Inspect ConfigMap contents.
+- Inject ConfigMap values into containers.
+- Use ConfigMaps as environment variables.
+- Understand the difference between application configuration and application code.
+- Verify configuration values from inside a running container.
+
+---
+
+ # Lab 07 — Manage Sensitive Configuration Using Kubernetes Secrets
+
+ ### Description
+
+ In this lab, you will learn how Kubernetes Secrets can be used to store sensitive application configuration such as usernames and passwords. You will create a Secret and make its values available to a container.
+
+ The lab also introduces important security considerations surrounding Kubernetes Secrets and their representation within Kubernetes.
+
+ ### Objectives
+
+ - Understand the purpose of Kubernetes Secrets.
+- Create a generic Secret.
+- Store key-value sensitive configuration.
+- Inspect Secret metadata.
+- Inject Secret values into containers.
+- Access Secret values through environment variables.
+- Understand the difference between encoding and encryption.
+- Apply basic security practices when handling Secrets.
+
+---
+
+ # Lab 08 — Isolate Workloads Using Kubernetes Namespaces
+
+ ### Description
+
+ In this lab, you will use Kubernetes Namespaces to logically separate workloads within a cluster. You will create separate environments for development and production and deploy resources into specific namespaces.
+
+ You will also practice querying resources across individual namespaces and across the entire cluster.
+
+ ### Objectives
+
+ - Understand the purpose of Kubernetes Namespaces.
+- Create Namespaces.
+- Deploy resources into a specific Namespace.
+- Retrieve resources from a specific Namespace.
+- List resources across all Namespaces.
+- Understand Namespace-scoped resources.
+- Configure the current kubectl context with a default Namespace.
+- Avoid common Namespace-related troubleshooting mistakes.
+
+---
+
+ # Lab 09 — Configure Kubernetes Resource Requests and Limits
+
+ ### Description
+
+ In this lab, you will configure CPU and memory resource requests and limits for application containers. You will learn how Kubernetes uses resource requests during scheduling and how resource limits constrain container resource consumption.
+
+ This lab provides practical experience with one of the key mechanisms Kubernetes uses to manage cluster resources.
+
+ ### Objectives
+
+ - Understand CPU and memory resources in Kubernetes.
+- Configure resource requests.
+- Configure resource limits.
+- Understand how requests affect Pod scheduling.
+- Understand how limits affect container resource usage.
+- Inspect configured resource requirements.
+- Identify resource-related scheduling problems.
+- Understand the importance of resource management in production workloads.
+
+---
+
+ # Lab 10 — Control Pod Placement Using Node Selectors
+
+ ### Description
+
+ In this lab, you will control where Kubernetes schedules Pods by using node labels and `nodeSelector`. You will label a node according to a hardware characteristic and configure a Pod so that it can run only on a matching node.
+
+ This lab introduces basic workload placement and scheduling constraints.
+
+ ### Objectives
+
+ - Understand Kubernetes node labels.
+- Inspect labels assigned to nodes.
+- Apply labels to nodes.
+- Configure a Pod using `nodeSelector`.
+- Control Pod placement based on node characteristics.
+- Verify where a Pod has been scheduled.
+- Understand what happens when no node satisfies a selector.
+- Troubleshoot Pods that remain in the `Pending` state because of scheduling constraints.
+
+---
+
+ # Lab 11 — Control Scheduling Using Taints and Tolerations
+
+ ### Description
+
+ In this lab, you will use taints and tolerations to control which workloads can be scheduled onto specific nodes. You will reserve a node for specialized workloads and configure a Pod with the appropriate toleration.
+
+ This lab builds on the concepts from node selectors and introduces another important Kubernetes scheduling mechanism.
+
+ ### Objectives
+
+ - Understand Kubernetes node taints.
+- Apply a taint to a node.
+- Understand the `NoSchedule` effect.
+- Observe how taints affect Pod scheduling.
+- Configure Pod tolerations.
+- Allow specific workloads to run on tainted nodes.
+- Understand the difference between tolerating and selecting a node.
+- Remove taints safely after completing the exercise.
+- Troubleshoot Pods that cannot be scheduled because of taints.
+
+---
+
+ # Lab 12 — Troubleshoot a Broken Kubernetes Deployment
+
+ ### Description
+
+ In this lab, you will troubleshoot a deliberately broken Kubernetes Deployment. The workload contains multiple configuration problems that prevent the application from operating correctly.
+
+ You will follow a structured Kubernetes troubleshooting process, starting from the Deployment and working down through ReplicaSets and Pods until you identify the root causes.
+
+ ### Objectives
+
+ - Develop a systematic Kubernetes troubleshooting methodology.
+- Inspect Deployment status and configuration.
+- Inspect ReplicaSets created by a Deployment.
+- Inspect individual Pod states.
+- Analyze Kubernetes events.
+- Inspect container logs.
+- Identify incorrect container images.
+- Identify label and selector mismatches.
+- Correct configuration problems.
+- Verify that the Deployment returns to a healthy state.
+- Practice the troubleshooting techniques required for the CKA exam.
+
+---
+
+ # Lab 13 — Troubleshoot Kubernetes Service Networking
+
+ ### Description
+
+ In this lab, you will troubleshoot communication between Kubernetes workloads through a Service. You will investigate Service configuration, selectors, endpoints, and internal DNS resolution.
+
+ The lab is designed to simulate a real-world networking problem where an application cannot communicate with another application inside the cluster.
+
+ ### Objectives
+
+ - Understand Kubernetes internal Service networking.
+- Create and inspect a backend application.
+- Create a Kubernetes Service.
+- Understand Service selectors and endpoints.
+- Verify whether a Service has healthy endpoints.
+- Test connectivity between Pods.
+- Test Kubernetes DNS resolution.
+- Identify selector and endpoint problems.
+- Troubleshoot failed Service connectivity.
+- Understand the relationship between Pods, Services, and DNS.
+
+---
+
+ # Lab 14 — Configure Persistent Storage Using PersistentVolumes and PersistentVolumeClaims
+
+ ### Description
+
+ In this lab, you will learn how Kubernetes provides persistent storage to applications using PersistentVolumes (PV) and PersistentVolumeClaims (PVC).
+
+ You will create persistent storage, claim that storage through a PVC, mount it inside a Pod, write data to the mounted volume, and verify that the data remains available after the Pod is recreated.
+
+ ### Objectives
+
+ - Understand Kubernetes persistent storage concepts.
+- Understand the relationship between PVs and PVCs.
+- Create a PersistentVolume.
+- Create a PersistentVolumeClaim.
+- Understand storage capacity and access modes.
+- Bind a PVC to a suitable PV.
+- Mount a PVC into a Pod.
+- Write application data to persistent storage.
+- Recreate a Pod and verify data persistence.
+- Troubleshoot PVCs stuck in the `Pending` state.
+
+---
+
+ # Lab 15 — Configure Kubernetes RBAC for Application Access
+
+ ### Description
+
+ In this lab, you will implement role-based access control using Kubernetes ServiceAccounts, Roles, and RoleBindings.
+
+ A developer requires read-only access to Pods within a namespace but must not be allowed to delete them. You will create the necessary RBAC resources and verify the permissions using Kubernetes authorization checks.
+
+ ### Objectives
+
+ - Understand Kubernetes authentication and authorization concepts.
+- Understand the purpose of ServiceAccounts.
+- Create a ServiceAccount.
+- Create a namespace-scoped Role.
+- Define permissions using RBAC verbs.
+- Create a RoleBinding.
+- Associate a ServiceAccount with a Role.
+- Test whether a user or ServiceAccount can perform an operation.
+- Verify allowed and denied permissions.
+- Understand the difference between Role and ClusterRole.
+- Understand the difference between RoleBinding and ClusterRoleBinding.
+- Apply the principle of least privilege.
+
+---
+
+ # Recommended Learning Progression
+
+ These 15 labs build on each other:
+
+```
+01  Pods
+ ↓
+02  YAML
+ ↓
+03  Deployments
+ ↓
+04  Services
+ ↓
+05  Labels & Selectors
+ ↓
+06  ConfigMaps
+ ↓
+07  Secrets
+ ↓
+08  Namespaces
+ ↓
+09  Resources
+ ↓
+10  Node Selectors
+ ↓
+11  Taints & Tolerations
+ ↓
+12  Troubleshooting
+ ↓
+13  Service Networking
+ ↓
+14  Persistent Storage
+ ↓
+15  RBAC
+```
+
+ This gives you a progression from **basic Kubernetes objects → workloads → networking → configuration → scheduling → troubleshooting → storage → security**, which is a much better structure for a professional CKA lab manual.
