@@ -63,25 +63,31 @@ jobs:
           cache-to: type=gha,mode=max
 
       # Live automation test verifying your app spins up cleanly on port 5500
-      - name: Verify Container Health (Port 5500)
+      - name: Verify Container Health
         run: |
-          echo "Starting the application container..."
-          docker run --rm -d -p 5500:5500 --name app-health-check kubernetes-zero-to-hero:test
-          
-          echo "Waiting 10 seconds for the application to initialize on port 5500..."
-          sleep 10
-          
-          echo "Running health check probe against http://localhost:5500..."
-          if curl --silent --fail http://localhost:5500 > /dev/null; then
-            echo "✅ Health check successful! Port 5500 is responsive."
-            docker stop app-health-check
-          else
-            echo "❌ Health check failed! The application on port 5500 did not respond correctly."
-            echo "=== Printing Container Logs for Troubleshooting ==="
-            docker logs app-health-check
-            docker stop app-health-check
-            exit 1
-          fi
+            echo "Starting the application container..."
+
+            docker run --rm -d \
+            -p 5500:80 \
+              --name app-health-check \
+              kubernetes-zero-to-hero:test
+
+            echo "Waiting for Nginx..."
+            sleep 5
+
+            echo "Checking http://localhost:5500..."
+
+            if curl --silent --fail http://localhost:5500 > /dev/null; then
+              echo "✅ Health check successful!"
+              docker stop app-health-check
+            else
+              echo "❌ Health check failed!"
+              echo "=== Container Logs ==="
+              docker logs app-health-check
+              docker stop app-health-check
+              exit 1
+            fi
+
 
   # STAGE 2: Secure Production Release to Docker Hub
   publish-to-dockerhub:
