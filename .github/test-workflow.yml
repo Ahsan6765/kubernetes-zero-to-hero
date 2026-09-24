@@ -1,4 +1,4 @@
-name: Build Docker image
+# name: Build Docker image
 
 # on:
 #   push:
@@ -6,21 +6,112 @@ name: Build Docker image
 #   pull_request:
 #     branches: [ main ]
 
-  jobs:
-    build:
-      runs-on: ubuntu-latest
+#   jobs:
+#     build:
+#       runs-on: ubuntu-latest
 
-      steps:
-        - name: Check out repository
-          uses: actions/checkout@v4
+#       steps:
+#         - name: Check out repository
+#           uses: actions/checkout@v4
 
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v3
+#         - name: Set up Docker Buildx
+#           uses: docker/setup-buildx-action@v3
 
-        - name: Build Docker image
-          uses: docker/build-push-action@v6
-          with:
-            context: .
-            file: ./Dockerfile
-            push: false
-            tags: kubernetes-zero-to-hero:latest
+#         - name: Build Docker image
+#           uses: docker/build-push-action@v6
+#           with:
+#             context: .
+#             file: ./Dockerfile
+#             push: false
+#             tags: kubernetes-zero-to-hero:latest
+# ===============================================================
+# This is a professional GitHub Actions workflow for building and deploying a Docker image. 
+# ===============================================================
+
+
+name: Build and Deploy Docker Image
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # STAGE 1: Compile, Build Local Image, and Test Port 5500
+  build-and-test:
+    name: Build & Test Stage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Uses GHA native layer caching to optimize build speeds dramatically
+      - name: Build Local Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false  # Do not push to Docker Hub during local tests
+          load: true   # Imports the image layers locally into the runner's Docker daemon
+          tags: kubernetes-zero-to-hero:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Live automation test verifying your app spins up cleanly on port 5500
+      - name: Verify Container Health (Port 5500)
+        run: |
+          echo "Starting the application container..."
+          docker run --rm -d -p 5500:5500 --name app-health-check kubernetes-zero-to-hero:test
+          
+          echo "Waiting 10 seconds for the application to initialize on port 5500..."
+          sleep 10
+          
+          echo "Running health check probe against http://localhost:5500..."
+          if curl --silent --fail http://localhost:5500 > /dev/null; then
+            echo "✅ Health check successful! Port 5500 is responsive."
+            docker stop app-health-check
+          else
+            echo "❌ Health check failed! The application on port 5500 did not respond correctly."
+            echo "=== Printing Container Logs for Troubleshooting ==="
+            docker logs app-health-check
+            docker stop app-health-check
+            exit 1
+          fi
+
+  # STAGE 2: Secure Production Release to Docker Hub
+  publish-to-dockerhub:
+    name: Production Release Stage
+    runs-on: ubuntu-latest
+    needs: build-and-test  # Enforces linear dependency; fails if Stage 1 tests fail
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' # Only deploy on true main merges
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Production Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          # Tags the release with 'latest' and a unique git reference SHA for clear change-tracking
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-zero-to-hero:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-zero-to-hero:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
